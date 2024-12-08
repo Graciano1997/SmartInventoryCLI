@@ -1,1 +1,3 @@
 {"name":"apple","price":4.95,"quantity":1000.0}
+{"name":"banana","price":10,"quantity":200.0}
+{"name":"oranage","price":10,"quantity":20.0}

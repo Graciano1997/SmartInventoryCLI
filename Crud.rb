@@ -11,11 +11,7 @@ module Crud
 
     if File.exist?(file_name)
       @file_name=file_name
-      File.open(file_name,"r") do |file|
-        file.each_line do |line|
-          data_db << JSON.parse("#{line}",symbolize_names: true)
-        end
-      end
+      IO.foreach(file_name){|line| data_db << JSON.parse("#{line}",symbolize_names: true) }
     end
 
     if data_db.size > 0
