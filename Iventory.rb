@@ -1,52 +1,30 @@
 require_relative './Item'
+require_relative './Crud'
 
 class Iventory
-
+  
+  include Crud  
+  
   def initialize
-    @db=[]
+    # @db=[]
+    self.configure_db(@db)
+    self.fetch_data("iventory_db.txt")
   end
 
-  def add_item(name,quantity)
-    
-    new_item=Item.new(name,quantity)
+  def promotion(percentage,product_name = false)
+    @current_db=self.export_db
+    if not product_name
+      puts "Promotion, Successfully done.  \n All the product of the Iventory received #{percentage}% of discount " if @current_db.each{|item| item.price=item.price - (item.price)*percentage/100}  
+    else 
 
-    item_already_Exists=false
+      product_to_promove=self.search_item(product_name)
 
-    @db.each do |item|
-      item_already_Exists=true if(item.name==name)
+      if product_to_promove
+        product_to_promove.price-=(product_to_promove.price)*percentage/100
+        puts "Promotion, Successfully done.\n The #{product_to_promove.name} received #{percentage}% of discount"
+      else
+        puts "Could not find the #{product_name} in the Iventory List \n Please run > list iventory "    
+      end
     end
-
-    @db.push(new_item) if(!item_already_Exists)
-
-    puts "Item Already Exists in the Iventory" if(item_already_Exists)
-  end
-
-  def update_item(name,quantity)
-    @db.each do |item|
-      item.quantity+=quantity if(item.name==name)      
-    end
-  end
-
-  def remove_item(name)
-    @db.each  do |item|
-      @db.delete(item) if(item.name==name)      
-    end
-  end
-
-  def view_items
-    puts "*********************INVENTORY_LIST***************************"
-    puts ""
-    @db.each{|item| puts "Name: #{item.name} Quantity: #{item.quantity}"}
-    puts ""
-    puts "******************Total Items #{@db.count} *******************"
   end
 end
-
-Iventory_repo=Iventory.new()
-
-Iventory_repo.add_item("Banana",20)
- Iventory_repo.view_items
-#  Iventory_repo.remove_item("Banana")
- Iventory_repo.add_item("Banana",20)
-Iventory_repo.view_items
-
